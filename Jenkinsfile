@@ -4,6 +4,7 @@ pipeline {
         // Use Jenkins credentials IDs
         GIT_CREDENTIALS_ID = 'github-credentials' // GitHub credentials
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials' // Docker Hub credentials
+        KUBECONFIG = '/home/ubuntu/kubeconfig' // Path to Kubernetes config
     }
     stages {
         stage('Checkout Code') {
@@ -41,7 +42,9 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh 'kubectl apply -f user-service-deployment.yaml'
+                    withEnv(["KUBECONFIG=${env.KUBECONFIG}"]) {
+                        sh 'kubectl apply -f user-service-deployment.yaml'
+                    }
                 }
             }
         }
