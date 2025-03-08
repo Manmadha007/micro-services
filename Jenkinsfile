@@ -25,7 +25,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("user-service")
+                    docker.build("user-service", "userservice_dir/.")
                 }
             }
         }
