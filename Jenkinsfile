@@ -1,31 +1,20 @@
 pipeline {
     agent any
     environment {
-        // Use Jenkins credentials IDs
-        GIT_CREDENTIALS_ID = 'github-credentials' // GitHub credentials
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials' // Docker Hub credentials
+        GIT_CREDENTIALS_ID = 'github-credentials'
+        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+        JD_IMAGE = 'user-service'
     }
     stages {
         stage('Checkout Code') {
             steps {
-                script {
-                    checkout([
-                        $class: 'GitSCM',
-                        branches: [[name: '*/main']],
-                        doGenerateSubmoduleConfigurations: false,
-                        extensions: [],
-                        userRemoteConfigs: [[
-                            url: 'https://github.com/Manmadha007/micro-services.git',
-                            credentialsId: GIT_CREDENTIALS_ID
-                        ]]
-                    ])
-                }
+                checkout scm
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("user-service")
+                    docker.build("${JD_IMAGE}", ".")
                 }
             }
         }
@@ -33,7 +22,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        docker.image("user-service").push()
+                        docker.image("${JD_IMAGE}").push()
                     }
                 }
             }
