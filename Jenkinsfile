@@ -25,7 +25,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("user-service", "userservice_dir/.")
+                    docker.build("manmadha4github/user-service", "userservice_dir/.")
                 }
             }
         }
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        docker.image("user-service").push()
+                        docker.image("manmadha4github/user-service").push()
                     }
                 }
             }
