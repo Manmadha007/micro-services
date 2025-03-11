@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: user-service
-        image: manmadha4github/user-service
+        image: manmadha4github/user-service:latest
         ports:
         - containerPort: 5000
 ---
